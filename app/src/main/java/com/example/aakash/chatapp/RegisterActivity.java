@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -45,6 +47,56 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
     }
+    public void signUp(View view){
+        registerUser();
+    }
+
+    //Actual registration method
+    private void registerUser(){
+        myUserName.setError(null);
+        myEmail.setError(null);
+        myPassword.setError(null);
+        myConfirmPassword.setError(null);
+
+        //Grab values of email and password
+        String email = myEmail.getText().toString();
+        String password = myPassword.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        //Password validation
+        if(TextUtils.isEmpty(password) == true){
+            myPassword.setError(getString(R.string.empty_password));
+            focusView = myPassword;
+            cancel = true;
+        }
+        else if (checkPassword(password) == false) {
+            myConfirmPassword.setError(getString(R.string.conf_password_invalid));
+            focusView = myConfirmPassword;
+            cancel = true;
+        }
+
+        //Email validation
+        if (TextUtils.isEmpty(email) == true){
+            myEmail.setError(getString(R.string.invalid_email));
+            focusView = myEmail;
+            cancel = true;
+        }
+        else if(checkEmail(email) == false){
+            myEmail.setError(getString(R.string.invalid_email));
+            focusView = myEmail;
+            cancel = true;
+        }
+
+        if (cancel){
+            focusView.requestFocus();
+        }
+        else {
+            createUser();
+        }
+
+    }
 
     //Validation for email
     private boolean checkEmail(String email){
@@ -54,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
     //Validation for password
     private boolean checkPassword(String password){
        String confirmPassword = myConfirmPassword.getText().toString() ;
-       return confirmPassword.equals(password) && password.length()>6 ;
+       return confirmPassword.equals(password) && password.length()>=6 ;
 
     }
 
@@ -63,19 +115,24 @@ public class RegisterActivity extends AppCompatActivity {
         String email = myEmail.getText().toString();
         String password = myPassword.getText().toString();
 
+        Log.i("TAG","email: " + email );
+        Log.i("TAG","password: " + password );
+
         //Call method from firebase
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.i("TAG","User creation situation"+task.isSuccessful());
+                Log.i("TAG","createUserWithEmail:onComplete: " + task.isSuccessful());
                 if (!task.isSuccessful()){
                     showErrorBox("Registration failed !!");
                 }
                 else {
                     saveUserName();
-                    Toast.makeText(RegisterActivity.this,"Registrtion Successful",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"Registration Successful",Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                    finish();
                     startActivity(intent);
                 }
             }
@@ -93,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
     //Error box
     private void showErrorBox(String message){
         new AlertDialog.Builder(this)
-                .setTitle("Aladin motherfucker")
+                .setTitle("Message")
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok,null)
                 .setIcon(android.R.drawable.ic_dialog_alert)

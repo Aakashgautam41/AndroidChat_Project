@@ -3,5 +3,7 @@
     <string name="invalid_email">Your email is invalid</string>
     <string name="invalid_password">Your password is too short</string>
     <string name="incorrect_password">Your password is incorrect</string>
+    <string name="empty_password">Your password field is empty or less than 6 characters</string>
+    <string name="conf_password_invalid">Your password does not match</string>
     <string name="field_required">Please fill the required fields</string>
 </resources>

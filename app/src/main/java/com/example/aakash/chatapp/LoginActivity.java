@@ -16,6 +16,7 @@ import android.widget.Button;
 
     public void onSignup(View view){
         Intent myIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        finish();
         startActivity(myIntent);
     }
 }
