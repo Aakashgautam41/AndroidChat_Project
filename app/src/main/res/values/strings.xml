@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="invalid_email">Your email is invalid</string>
+    <string name="invalid_password">Your password is too short</string>
+    <string name="incorrect_password">Your password is incorrect</string>
+    <string name="field_required">Please fill the required fields</string>
+</resources>
