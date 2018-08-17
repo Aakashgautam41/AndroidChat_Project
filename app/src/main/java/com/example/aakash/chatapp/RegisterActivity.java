@@ -43,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         myConfirmPassword = (EditText) findViewById(R.id.register_confirmpassword);
 
 
-        //get a hold of firebase instance
+        //getting firebase instance
         mAuth = FirebaseAuth.getInstance();
 
     }
@@ -114,9 +114,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void createUser(){
         String email = myEmail.getText().toString();
         String password = myPassword.getText().toString();
-
-        Log.i("TAG","email: " + email );
-        Log.i("TAG","password: " + password );
 
         //Call method from firebase
         mAuth.createUserWithEmailAndPassword(email, password)
